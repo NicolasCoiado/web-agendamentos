@@ -11,6 +11,16 @@ require_once("controller/ControllerCadastro.php");
 	<script src="js/jquery.js"></script>
 	<script src="bootstrap/js/bootstrap.js"></script>
 	<!--<script src="js/funcoes.js"></script>-->
+	<script>
+		function confirmDelete(delUrl) {
+  			if (confirm("Deseja apagar o registro?")) {
+   				document.location = delUrl;
+   				//var url_string = "http://localhost/agendamento-mysql/" + delUrl;
+				//var url = new URL(url_string);
+				//var data = url.searchParams.get("id"); //pega o value
+	        }  
+		}
+	</script>
 	<title>SISTEMA DE AGENDAMENTO - CLIENTES</title>
 </head> 
 <body> 
@@ -37,7 +47,7 @@ require_once("controller/ControllerCadastro.php");
 			<div class="card mb-3 col-12">
 				<div class="card-body" style="margin: auto;">
 					<h5 class="card-title">Consultar - Contatos Agendados</h5>
-					<table class="table table-responsive table-hover" style="width: 100%;">
+					<table class="table table-responsive" style="width: auto;">
 						<thead class="table-active bg-primary">
 							<tr>
 								<th scope="col">Nome</th>
@@ -48,26 +58,28 @@ require_once("controller/ControllerCadastro.php");
 								<th scope="col">Ação</th>
 							</tr>
 						</thead>
+						<tbody id="TableData">
 						<?php
 							$controller = new ControllerCadastro();
-							$resultado = $controller->listar();
+							$resultado = $controller->listar(0);
 							//print_r($resultado);
-							for($i=0;$i<=count($resultado)-1;$i++){ 
+							for($i=0;$i<count($resultado);$i++){ 
 						?>
 								<tr>
-									<td scope="row"><?php echo $resultado[$i]['nome']; ?></td>
-									<td><?php echo $resultado[$i]['telefone']; ?></td>
-									<td><?php echo $resultado[$i]['origem']; ?></td>
-									<td><?php echo $resultado[$i]['data_contato']; ?></td>
-									<td><?php echo $resultado[$i]['observacao']; ?></td>
-									<td>
-										<button type="button" class="btn btn-outline-primary" style="width: 72px;">Editar</button>
-										<button type="button" class="btn btn-outline-primary" style="width: 72px;">Excluir</button>
+									<td scope="col"><?php echo $resultado[$i]['nome']; ?></td>
+									<td scope="col"><?php echo $resultado[$i]['telefone']; ?></td>
+									<td scope="col"><?php echo $resultado[$i]['origem']; ?></td>
+									<td scope="col"><?php echo $resultado[$i]['data_contato']; ?></td>
+									<td scope="col"><?php echo $resultado[$i]['observacao']; ?></td>
+									<td scope="col">
+										<button type="button" class="btn btn-outline-primary" onclick="location.href='editarClientes.php?id=<?php echo $resultado[$i]['id']; ?>'" style="width: 72px;">Editar</button>
+										<button type="button" class="btn btn-outline-primary" onclick="javascript:confirmDelete('excluirClientes.php?id=<?php echo $resultado[$i]['id']; ?>')" style="width: 72px;">Excluir</button>
 									</td>
 								</tr>
 						<?php
 							}
 						?>
+						</tbody>
 						<!--<tr>
 							<td scope="row">Jeferson Roberto de Lima</td>
 							<td>(11)97665-0099</td>
@@ -80,7 +92,6 @@ require_once("controller/ControllerCadastro.php");
 							</td>
 						</tr>-->
 					</table>
-					<button type="button" id="btnListar" class="btn btn-primary">Buscar Agendamento</button>
 				</div>
 			</div>
 		</div>
